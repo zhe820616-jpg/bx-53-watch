@@ -1,6 +1,6 @@
 {
   "product": "BX-53 All-in-One Set",
-  "checked_at": "2026-11-02T16:13:41+00:00",
+  "checked_at": "2026-11-02T16:24:27+00:00",
   "sources": [
     {
       "id": "bic",
@@ -9,8 +9,8 @@
       "status": "unknown",
       "label": "無法確認（讀取／驗證失敗）",
       "price": "",
-      "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.biccamera.com/bc/item/15605654/\nCall log:\n  - navigating to \"https://www.biccamera.com/bc/item/15605654/\", waiting until \"domcontentloaded\"\n",
-      "checked_at": "2026-11-02T16:13:05+00:00"
+      "error": "Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://www.biccamera.com/bc/item/15605654/\", waiting until \"domcontentloaded\"\n",
+      "checked_at": "2026-11-02T16:24:27+00:00"
     },
     {
       "id": "yodobashi",
@@ -19,8 +19,8 @@
       "status": "unknown",
       "label": "無法確認（讀取／驗證失敗）",
       "price": "",
-      "error": "Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.yodobashi.com/product/100000001010200995/\nCall log:\n  - navigating to \"https://www.yodobashi.com/product/100000001010200995/\", waiting until \"domcontentloaded\"\n",
-      "checked_at": "2026-11-02T16:13:05+00:00"
+      "error": "Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://www.yodobashi.com/product/100000001010200995/\", waiting until \"domcontentloaded\"\n",
+      "checked_at": "2026-11-02T16:24:27+00:00"
     },
     {
       "id": "hlj",
@@ -35,43 +35,58 @@
       "fetch_method": "requests",
       "content_length": 55249,
       "page_title": "BEYBLADE X BX-53 オールインワンセット | HLJ.co.jp",
-      "checked_at": "2026-11-02T16:12:32+00:00"
+      "checked_at": "2026-11-02T16:23:10+00:00"
     },
     {
       "id": "rakuten_kenbill",
       "name": "Rakuten kenbill-2",
       "url": "https://item.rakuten.co.jp/kenbill-2/4904810073734/",
-      "status": "unknown",
-      "label": "無法確認（讀取／驗證失敗）",
+      "status": "out_of_stock",
+      "label": "缺貨／停止販售",
       "price": "",
-      "error": "'NoneType' object has no attribute 'url'",
-      "checked_at": "2026-11-02T16:13:16+00:00"
+      "matched_keyword": "売り切れ",
+      "http_status": 200,
+      "content_type": "text/html; browser-rendered",
+      "fetch_method": "playwright",
+      "content_length": 171053,
+      "page_title": "【楽天市場】ベイブレードX BX-53 オールインワンセット【新品】 BEYBLADE X タカラトミー：ライフ＆ホビー ケンビル",
+      "checked_at": "2026-11-02T16:23:52+00:00"
     },
     {
       "id": "rakuten_premoa",
       "name": "Rakuten PREMOA",
       "url": "https://item.rakuten.co.jp/premoa/4904810073734/",
       "status": "unknown",
-      "label": "無法確認（讀取／驗證失敗）",
+      "label": "無法確認（未找到明確庫存訊號）",
       "price": "",
-      "error": "'NoneType' object has no attribute 'url'",
-      "checked_at": "2026-11-02T16:13:10+00:00"
+      "matched_keyword": "",
+      "http_status": 200,
+      "content_type": "text/html; browser-rendered",
+      "fetch_method": "playwright",
+      "content_length": 3532,
+      "page_title": "【楽天市場】エラー",
+      "checked_at": "2026-11-02T16:23:46+00:00"
     },
     {
       "id": "rakuten_sakura",
       "name": "Rakuten トイランドクローバー",
       "url": "https://item.rakuten.co.jp/sakurayashouten/4904810073734/",
       "status": "unknown",
-      "label": "無法確認（讀取／驗證失敗）",
+      "label": "無法確認（未找到明確庫存訊號）",
       "price": "",
-      "error": "'NoneType' object has no attribute 'url'",
-      "checked_at": "2026-11-02T16:13:41+00:00"
+      "matched_keyword": "",
+      "http_status": 200,
+      "content_type": "text/html; browser-rendered",
+      "fetch_method": "playwright",
+      "content_length": 3561,
+      "page_title": "【楽天市場】エラー",
+      "checked_at": "2026-11-02T16:24:23+00:00"
     }
   ],
   "summary": {
     "in_stock": 0,
-    "out_of_stock": 1,
-    "unknown": 5
+    "out_of_stock": 2,
+    "unknown": 4
   },
   "note": "只在確認頁面為 BX-53 後判讀；優先使用商品主內容及結構化庫存資料；unknown 不代表缺貨。"
 }
