@@ -1,8 +1,6 @@
 name: BX-53 stock watch
 
 on:
-  push:
-    branches: [main]
   schedule:
     - cron: "2-57/5 * * * *"
   workflow_dispatch:
