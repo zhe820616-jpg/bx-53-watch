@@ -2,11 +2,12 @@ name: BX-53 stock watch
 
 on:
   schedule:
-    - cron: "2-57/5 * * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: bx53-stock-watch
@@ -41,3 +42,22 @@ jobs:
           git add docs/status.json docs/shop-status.json
           git diff --cached --quiet || git commit -m "Update BX-53 stock status"
           git push
+
+      - name: Stop temporary 15-minute schedule at 05:00 Taiwan time
+        if: always() && github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CUTOFF_EPOCH: "1793653200"
+        run: |
+          now=$(date -u +%s)
+          if [ "$now" -ge "$CUTOFF_EPOCH" ]; then
+            echo "Monitoring window ended at 05:00 Asia/Taipei. Disabling this temporary workflow schedule."
+            curl --fail-with-body --silent --show-error \
+              -X PUT \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows/watch.yml/disable"
+          else
+            echo "Before cutoff; keep the 15-minute monitoring schedule active."
+          fi
