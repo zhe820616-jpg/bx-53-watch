@@ -5,13 +5,17 @@
 <meta name="apple-mobile-web-app-title" content="BX-53監控">
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon.svg">
 <link rel="stylesheet" href="style.css"><title>BX-53 補貨監控</title></head>
-<body><main class="wrap"><header><div class="eyebrow">BEYBLADE X · AMAZON JAPAN</div>
-<h1>BX-53 補貨監控</h1><p class="muted">商品 ASIN：B0HJ75X3PN</p></header>
-<section class="status-card"><div class="status-line"><span id="dot" class="dot"></span><span id="label">讀取狀態中…</span></div>
-<p id="checked" class="muted">尚未讀取</p><p id="message" class="message"></p><button id="refresh">重新整理</button>
-<a class="amazon" href="https://www.amazon.co.jp/dp/B0HJ75X3PN" target="_blank" rel="noopener">開啟 Amazon 日本商品頁 ↗</a></section>
-<section class="panel"><h2>出品資訊</h2><div id="offers" class="offers"><p class="muted">尚無資料</p></div>
-<p class="note">「可能可購買」不代表一定能寄送台灣；請登入 Amazon 確認配送地址、賣家及結帳庫存。</p></section>
+<body><main class="wrap"><header><div class="eyebrow">BEYBLADE X · JAPAN STOCK WATCH</div>
+<h1>BX-53 補貨監控</h1><p class="muted">Amazon 日本＋日本零售通路</p></header>
+<section class="status-card"><h2>Amazon Japan</h2><div class="status-line"><span id="dot" class="dot"></span><span id="label">讀取狀態中…</span></div>
+<p id="checked" class="muted">尚未讀取</p><p id="message" class="message"></p>
+<a class="amazon" href="https://www.amazon.co.jp/dp/B0HJ75X3PN" target="_blank" rel="noopener">開啟 Amazon 日本商品頁 ↗</a>
+<h2>出品資訊</h2><div id="offers" class="offers"><p class="muted">尚無資料</p></div>
+<p class="note">Amazon 自動讀取可能遇到驗證限制；「可能可購買」仍須進入商品頁確認賣家及結帳庫存。</p></section>
+<section class="panel"><div class="status-line"><h2>日本零售通路</h2><button id="refresh">重新整理</button></div>
+<p id="shop-checked" class="muted">尚未讀取通路紀錄</p><div id="shops" class="offers"><p class="muted">讀取中…</p></div>
+<p class="note">「無法確認／讀取失敗」不等於缺貨。點通路名稱可開啟商品頁確認。</p>
+<a href="./shop-status.json" target="_blank" rel="noopener">查看原始監測紀錄（JSON） ↗</a></section>
 <section class="panel"><h2>推播設定</h2><p>請在 iPhone 的 ntfy App 訂閱你的私人 topic，並允許通知。推播由 ntfy 傳送；此頁面用來查看最新監控結果。</p>
 <a href="https://apps.apple.com/app/ntfy/id1625396347" target="_blank" rel="noopener">取得 ntfy iPhone App ↗</a></section>
-<footer>免費 Beta · 排程可能延遲 · Amazon 可能限制自動讀取</footer></main><script src="app.js"></script></body></html>
+<footer>免費 Beta · 排程可能延遲 · Amazon 可能限制自動讀取</footer></main><script src="app.js?v=2"></script></body></html>
