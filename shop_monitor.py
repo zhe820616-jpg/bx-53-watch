@@ -13,8 +13,12 @@ from bs4 import BeautifulSoup
 TOPIC = os.getenv("NTFY_TOPIC", "").strip()
 PATH = Path("docs/shop-status.json")
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    "Accept-Language": "ja-JP,ja;q=0.9,en;q=0.8",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Cache-Control": "no-cache",
+    "Pragma": "no-cache",
+    "Upgrade-Insecure-Requests": "1",
 }
 
 SOURCES = [
@@ -110,23 +114,32 @@ def structured_availability(soup):
 
 
 def get_status(source):
-    # Retry once: intermittent retailer timeouts from hosted runners should stay unknown.
+    # Retailer sites can respond slowly from hosted runners. Use a persistent
+    # session, realistic navigation headers, and bounded exponential retries.
     last_error = None
-    for attempt in range(2):
-        try:
-            response = requests.get(
-                source["url"],
-                headers={**HEADERS, "Referer": "https://www.google.com/"},
-                timeout=(10, 25),
-            )
-            response.raise_for_status()
-            break
-        except requests.RequestException as error:
-            last_error = error
-            if attempt == 0:
-                time.sleep(2)
-    else:
-        raise last_error
+    referer = {
+        "bic": "https://www.biccamera.com/",
+        "yodobashi": "https://www.yodobashi.com/",
+        "rakuten_kenbill": "https://www.rakuten.co.jp/",
+        "hlj": "https://www.hlj.co.jp/",
+    }.get(source["id"], "https://www.google.com/")
+    with requests.Session() as session:
+        for attempt in range(3):
+            try:
+                response = session.get(
+                    source["url"],
+                    headers={**HEADERS, "Referer": referer},
+                    timeout=(12, 40),
+                    allow_redirects=True,
+                )
+                response.raise_for_status()
+                break
+            except requests.RequestException as error:
+                last_error = error
+                if attempt < 2:
+                    time.sleep(2 ** (attempt + 1))
+        else:
+            raise last_error
     soup = BeautifulSoup(response.text, "html.parser")
     text = page_text(soup)
     lower = text.lower()
@@ -167,6 +180,8 @@ def get_status(source):
         "price": price_match.group(0) if price_match else "",
         "matched_keyword": matched,
         "http_status": response.status_code,
+        "content_type": response.headers.get("Content-Type", ""),
+        "content_length": len(response.content),
         "page_title": title[:180],
         "checked_at": now(),
     }
@@ -219,7 +234,7 @@ def main():
                 "product": "BX-53 All-in-One Set",
                 "checked_at": now(),
                 "sources": results,
-                "note": "網頁文字／按鈕屬性關鍵字判讀；連線失敗會重試一次；in_stock 是可能有貨，仍需開啟商品頁確認；unknown 不代表缺貨。",
+                "note": "以網頁文字、按鈕屬性及 Schema.org availability 判讀；連線失敗最多重試三次；in_stock 是可能有貨，仍需開啟商品頁確認；unknown 不代表缺貨。",
             },
             ensure_ascii=False,
             indent=2,
