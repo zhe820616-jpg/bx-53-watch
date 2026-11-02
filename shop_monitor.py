@@ -113,7 +113,7 @@ def get_status(source):
 
     # Bic Camera and Yodobashi often require browser-rendered pages or block plain HTTP.
     # Fall back to a real Chromium page only for those two stores.
-    if response is None and source["id"] in ("bic", "yodobashi") and sync_playwright:
+    if response is None and source["id"] in ("bic", "yodobashi", "rakuten_kenbill") and sync_playwright:
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch(headless=True, args=["--no-sandbox"])
             try:
@@ -137,7 +137,13 @@ def get_status(source):
     soup = BeautifulSoup(html, "html.parser")
     title = clean(soup.title.get_text(" ", strip=True)) if soup.title else ""
     if "html" not in content_type or is_blocked(soup, html):
-        raise ValueError("回應不是有效商品 HTML，或網站回傳封鎖／驗證頁")
+        final_url = response.url if response is not None else source["url"]
+        status_code = response.status_code if response is not None else "browser"
+        preview = clean(soup.get_text(" ", strip=True))[:180]
+        raise ValueError(
+            f"無效／受阻回應：HTTP={status_code}, Content-Type={content_type or 'unknown'}, "
+            f"bytes={len(html.encode('utf-8'))}, final_url={final_url}, preview={preview!r}"
+        )
     body = relevant_text(soup)
     identity_blob = (title + " " + body + " " + response.url).lower()
     if not any(token in identity_blob for token in source["identity"]):
