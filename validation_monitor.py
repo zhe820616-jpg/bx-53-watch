@@ -114,7 +114,7 @@ def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
-        output.write("mode=" + report["mode"] + "\\n")
+        output.write("mode=" + report["mode"] + "\n")
     print(json.dumps(report, ensure_ascii=False, indent=2))
     if not passed:
         print("At least one live control-page test did not pass; keep test mode and do not change BX-53 production targets.")
