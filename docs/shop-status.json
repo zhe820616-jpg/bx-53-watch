@@ -1,6 +1,6 @@
 {
   "product": "BX-53 All-in-One Set",
-  "checked_at": "2026-11-02T04:58:23+00:00",
+  "checked_at": "2026-11-02T05:41:56+00:00",
   "sources": [
     {
       "id": "bic",
@@ -27,7 +27,7 @@
       "status": "unknown",
       "label": "無法確認",
       "price": "¥7,480",
-      "checked_at": "2026-11-02T04:58:12+00:00"
+      "checked_at": "2026-11-02T05:41:46+00:00"
     },
     {
       "id": "rakuten_kenbill",
@@ -36,7 +36,7 @@
       "status": "unknown",
       "label": "無法確認",
       "price": "",
-      "checked_at": "2026-11-02T04:58:23+00:00"
+      "checked_at": "2026-11-02T05:41:56+00:00"
     }
   ],
   "note": "公開網頁文字判讀，unknown 不代表缺貨；請開啟商品頁確認。"
