@@ -38,7 +38,7 @@ def now():
     return datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds")
 
 def clean(value):
-    return re.sub(r"\\s+", " ", value or "").strip()
+    return re.sub(r"\s+", " ", value or "").strip()
 
 def structured_availability(soup):
     values = []
@@ -122,7 +122,7 @@ def get_status(source):
     else:
         status, matched = "unknown", ""
 
-    price_match = re.search(r"[￥¥]\\s*[0-9,]+", body)
+    price_match = re.search(r"[￥¥]\s*[0-9,]+", body)
     return {
         "id":source["id"], "name":source["name"], "url":source["url"],
         "status":status,
