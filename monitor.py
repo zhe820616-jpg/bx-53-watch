@@ -93,11 +93,13 @@ def main():
         soup = BeautifulSoup(product_html, "html.parser")
         if blocked(soup, product_html):
             raise RuntimeError("Amazon 商品頁回傳 CAPTCHA / Robot Check")
+        if len(product_html) < 1500:
+            raise RuntimeError("Amazon 商品頁內容過短，疑似非完整商品頁")
         title_el = soup.select_one("#productTitle")
         title = clean(title_el.get_text(" ", strip=True)) if title_el else ""
-        if title and "BX-53" not in title.upper():
-            raise RuntimeError("商品標題未能確認為 BX-53，停止判讀以避免監控錯商品")
-        result["title"] = title or "BX-53（標題未讀取）"
+        if not title or "BX-53" not in title.upper():
+            raise RuntimeError("未能從 Amazon 商品標題確認 BX-53，停止判讀以避免誤報")
+        result["title"] = title
 
         availability = soup.select_one("#availability")
         buybox = soup.select_one("#desktop_buybox, #buybox, #tabular-buybox")
@@ -116,9 +118,12 @@ def main():
                 result["offers"].append({"seller": direct_seller or "賣家未能辨識",
                     "price": direct_price or "價格未辨識", "source": "product-page", "snippet": full[:220]})
 
-        offers, offer_status = parse_offers(fetch(OFFERS_URL))
+        offers_html = fetch(OFFERS_URL)
+        offers, offer_status = parse_offers(offers_html)
         if offer_status == "captcha" and not result["offers"]:
             raise RuntimeError("Amazon 出品列表回傳 CAPTCHA / Robot Check")
+        if len(offers_html) < 1000 and not result["offers"]:
+            raise RuntimeError("Amazon 出品列表內容過短，無法可靠判讀")
         seen = {(o["seller"], o["price"]) for o in result["offers"]}
         for offer in offers:
             key = (offer["seller"], offer["price"])
