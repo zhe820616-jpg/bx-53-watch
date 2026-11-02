@@ -153,7 +153,8 @@ def get_status(source):
             f"bytes={len(html.encode('utf-8'))}, final_url={final_url}, preview={preview!r}"
         )
     body = relevant_text(soup)
-    identity_blob = (title + " " + body + " " + response.url).lower()
+    final_url = response.url if response is not None else source["url"]
+    identity_blob = (title + " " + body + " " + final_url).lower()
     if not any(token in identity_blob for token in source["identity"]):
         raise ValueError("頁面未能確認為 BX-53 商品，停止庫存判讀")
     lower = body.lower()
