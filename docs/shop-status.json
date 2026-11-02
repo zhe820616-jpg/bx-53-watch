@@ -1,0 +1,43 @@
+{
+  "product": "BX-53 All-in-One Set",
+  "checked_at": "2026-11-02T04:58:23+00:00",
+  "sources": [
+    {
+      "id": "bic",
+      "name": "Bic Camera",
+      "url": "https://www.biccamera.com/bc/item/15605654/",
+      "status": "unknown",
+      "label": "讀取失敗",
+      "price": "",
+      "error": "HTTPSConnectionPool(host='www.biccamera.com', port=443): Read timed out. (read timeout=25)"
+    },
+    {
+      "id": "yodobashi",
+      "name": "Yodobashi",
+      "url": "https://www.yodobashi.com/product/100000001010200995/",
+      "status": "unknown",
+      "label": "讀取失敗",
+      "price": "",
+      "error": "HTTPSConnectionPool(host='www.yodobashi.com', port=443): Read timed out. (read timeout=25)"
+    },
+    {
+      "id": "hlj",
+      "name": "HobbyLink Japan",
+      "url": "https://www.hlj.co.jp/product/TKT07373",
+      "status": "unknown",
+      "label": "無法確認",
+      "price": "¥7,480",
+      "checked_at": "2026-11-02T04:58:12+00:00"
+    },
+    {
+      "id": "rakuten_kenbill",
+      "name": "Rakuten kenbill-2",
+      "url": "https://item.rakuten.co.jp/kenbill-2/4904810073734/",
+      "status": "unknown",
+      "label": "無法確認",
+      "price": "",
+      "checked_at": "2026-11-02T04:58:23+00:00"
+    }
+  ],
+  "note": "公開網頁文字判讀，unknown 不代表缺貨；請開啟商品頁確認。"
+}
