@@ -22,6 +22,10 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
+      - name: Validate Python syntax
+        run: python -m compileall -q monitor.py shop_monitor.py tests
+      - name: Run monitor regression tests
+        run: python -m unittest discover -s tests -v
       - name: Check Amazon Japan BX-53
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
