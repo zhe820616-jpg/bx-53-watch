@@ -67,20 +67,19 @@ def check(target):
         identity_ok = all(token.lower() in low for token in target["identity"])
         positive = next((x for x in target["positive"] if x.lower() in low), "")
         negative = next((x for x in target["negative"] if x.lower() in low), "")
-        # Negative stock text anywhere on a category page can refer to another item;
-        # therefore a test page with mixed products cannot pass based on positives alone.
-        # We only accept the positive signal when the response is valid and identity matches.
-        passed = not blocked and identity_ok and bool(positive) and not negative
+        # Either explicit stock state validates the parser; the control product need not
+        # happen to be in stock when this scheduled test runs.
+        stock_signal = positive or negative
+        passed = not blocked and identity_ok and bool(stock_signal)
         return {
             "id": target["id"], "name": target["name"], "kind": target["kind"],
             "url": target["url"], "passed": passed,
             "status": "pass" if passed else "fail",
-            "reason": ("explicit in-stock signal and identity confirmed" if passed else
+            "reason": ("explicit stock signal and identity confirmed" if passed else
                        "blocked/invalid response" if blocked else
                        "expected page identity missing" if not identity_ok else
-                       "no unambiguous in-stock signal" if not positive else
-                       "negative stock signal also present"),
-            "matched_positive": positive, "matched_negative": negative,
+                       "no explicit stock signal"),
+            "matched_positive": positive, "matched_negative": negative, "stock_signal": stock_signal,
             "http_status": response.status_code, "content_type": content_type,
             "content_length": len(response.content), "page_title": title[:180],
             "checked_at": datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds"),
