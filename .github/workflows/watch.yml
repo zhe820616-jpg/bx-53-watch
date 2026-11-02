@@ -35,7 +35,6 @@ jobs:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
         run: python monitor.py
       - name: Check other Japan retailers for BX-53
-        if: steps.live_tests.outputs.mode == 'production'
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
         run: python shop_monitor.py
