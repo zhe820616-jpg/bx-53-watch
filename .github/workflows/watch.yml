@@ -26,6 +26,10 @@ jobs:
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
         run: python monitor.py
+      - name: Check other Japan BX-53 retailers
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: python shop_monitor.py
       - name: Publish status
         run: |
           git config user.name "github-actions[bot]"
