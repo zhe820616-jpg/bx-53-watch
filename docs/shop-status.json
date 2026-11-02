@@ -1,26 +1,26 @@
 {
   "product": "BX-53 All-in-One Set",
-  "checked_at": "2026-11-02T14:42:28+00:00",
+  "checked_at": "2026-11-02T15:33:44+00:00",
   "sources": [
     {
       "id": "bic",
       "name": "Bic Camera",
       "url": "https://www.biccamera.com/bc/item/15605654/",
       "status": "unknown",
-      "label": "讀取失敗",
+      "label": "無法確認（讀取／驗證失敗）",
       "price": "",
-      "error": "HTTPSConnectionPool(host='www.biccamera.com', port=443): Read timed out. (read timeout=40)",
-      "checked_at": "2026-11-02T14:42:27+00:00"
+      "error": "HTTPSConnectionPool(host='www.biccamera.com', port=443): Read timed out. (read timeout=25)",
+      "checked_at": "2026-11-02T15:33:44+00:00"
     },
     {
       "id": "yodobashi",
       "name": "Yodobashi",
       "url": "https://www.yodobashi.com/product/100000001010200995/",
       "status": "unknown",
-      "label": "讀取失敗",
+      "label": "無法確認（讀取／驗證失敗）",
       "price": "",
-      "error": "HTTPSConnectionPool(host='www.yodobashi.com', port=443): Read timed out. (read timeout=40)",
-      "checked_at": "2026-11-02T14:42:28+00:00"
+      "error": "HTTPSConnectionPool(host='www.yodobashi.com', port=443): Read timed out. (read timeout=25)",
+      "checked_at": "2026-11-02T15:33:40+00:00"
     },
     {
       "id": "hlj",
@@ -34,22 +34,23 @@
       "content_type": "text/html; charset=utf-8",
       "content_length": 55249,
       "page_title": "BEYBLADE X BX-53 オールインワンセット | HLJ.co.jp",
-      "checked_at": "2026-11-02T14:40:21+00:00"
+      "checked_at": "2026-11-02T15:32:20+00:00"
     },
     {
       "id": "rakuten_kenbill",
       "name": "Rakuten kenbill-2",
       "url": "https://item.rakuten.co.jp/kenbill-2/4904810073734/",
       "status": "unknown",
-      "label": "無法確認（未找到庫存關鍵字）",
+      "label": "無法確認（讀取／驗證失敗）",
       "price": "",
-      "matched_keyword": "",
-      "http_status": 200,
-      "content_type": "text/html",
-      "content_length": 43,
-      "page_title": "",
-      "checked_at": "2026-11-02T14:40:31+00:00"
+      "error": "回應不是有效商品 HTML，或網站回傳封鎖／驗證頁",
+      "checked_at": "2026-11-02T15:32:30+00:00"
     }
   ],
-  "note": "以網頁文字、按鈕屬性及 Schema.org availability 判讀；連線失敗最多重試三次；in_stock 是可能有貨，仍需開啟商品頁確認；unknown 不代表缺貨。"
+  "summary": {
+    "in_stock": 0,
+    "out_of_stock": 1,
+    "unknown": 3
+  },
+  "note": "只在確認頁面為 BX-53 後判讀；優先使用商品主內容及結構化庫存資料；unknown 不代表缺貨。"
 }
