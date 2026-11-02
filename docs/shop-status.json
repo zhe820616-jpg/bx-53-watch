@@ -1,6 +1,6 @@
 {
   "product": "BX-53 All-in-One Set",
-  "checked_at": "2026-11-02T07:45:42+00:00",
+  "checked_at": "2026-11-02T07:47:06+00:00",
   "sources": [
     {
       "id": "bic",
@@ -10,7 +10,7 @@
       "label": "讀取失敗",
       "price": "",
       "error": "HTTPSConnectionPool(host='www.biccamera.com', port=443): Read timed out. (read timeout=15)",
-      "checked_at": "2026-11-02T07:45:42+00:00"
+      "checked_at": "2026-11-02T07:47:06+00:00"
     },
     {
       "id": "yodobashi",
@@ -20,7 +20,7 @@
       "label": "讀取失敗",
       "price": "",
       "error": "HTTPSConnectionPool(host='www.yodobashi.com', port=443): Read timed out. (read timeout=15)",
-      "checked_at": "2026-11-02T07:45:42+00:00"
+      "checked_at": "2026-11-02T07:47:06+00:00"
     },
     {
       "id": "hlj",
@@ -32,7 +32,7 @@
       "matched_keyword": "在庫なし",
       "http_status": 200,
       "page_title": "BEYBLADE X BX-53 オールインワンセット | HLJ.co.jp",
-      "checked_at": "2026-11-02T07:45:27+00:00"
+      "checked_at": "2026-11-02T07:46:52+00:00"
     },
     {
       "id": "rakuten_kenbill",
@@ -44,7 +44,7 @@
       "matched_keyword": "",
       "http_status": 200,
       "page_title": "",
-      "checked_at": "2026-11-02T07:45:37+00:00"
+      "checked_at": "2026-11-02T07:47:02+00:00"
     }
   ],
   "note": "網頁文字關鍵字判讀；in_stock 是可能有貨，仍需開啟商品頁確認；unknown 不代表缺貨。"
