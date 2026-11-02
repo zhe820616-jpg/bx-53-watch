@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
@@ -42,8 +43,8 @@ SOURCES = [
         "id": "rakuten_kenbill",
         "name": "Rakuten kenbill-2",
         "url": "https://item.rakuten.co.jp/kenbill-2/4904810073734/",
-        "positive": ["在庫あり", "買い物かごに入れる", "商品をかごに追加"],
-        "negative": ["売り切れ", "売り切れました", "在庫切れ", "在庫なし", "販売期間外"],
+        "positive": ["在庫あり", "買い物かごに入れる", "商品をかごに追加", "商品をかごに追加する", "かごに入れる"],
+        "negative": ["売り切れ", "売り切れました", "在庫切れ", "在庫なし", "販売期間外", "販売期間が終了"],
     },
 ]
 
@@ -54,8 +55,8 @@ def now():
 
 def page_text(soup):
     parts = [soup.get_text(" ", strip=True)]
-    for tag in soup.find_all(["meta", "button", "input"]):
-        for attr in ("content", "aria-label", "value", "title"):
+    for tag in soup.find_all(["meta", "button", "input", "a", "span"]):
+        for attr in ("content", "aria-label", "value", "title", "data-stock", "data-availability", "alt"):
             value = tag.get(attr)
             if value:
                 parts.append(str(value))
@@ -63,8 +64,23 @@ def page_text(soup):
 
 
 def get_status(source):
-    response = requests.get(source["url"], headers=HEADERS, timeout=(8, 15))
-    response.raise_for_status()
+    # Retry once: intermittent retailer timeouts from hosted runners should stay unknown.
+    last_error = None
+    for attempt in range(2):
+        try:
+            response = requests.get(
+                source["url"],
+                headers={**HEADERS, "Referer": "https://www.google.com/"},
+                timeout=(10, 25),
+            )
+            response.raise_for_status()
+            break
+        except requests.RequestException as error:
+            last_error = error
+            if attempt == 0:
+                time.sleep(2)
+    else:
+        raise last_error
     soup = BeautifulSoup(response.text, "html.parser")
     text = page_text(soup)
     lower = text.lower()
@@ -150,7 +166,7 @@ def main():
                 "product": "BX-53 All-in-One Set",
                 "checked_at": now(),
                 "sources": results,
-                "note": "網頁文字關鍵字判讀；in_stock 是可能有貨，仍需開啟商品頁確認；unknown 不代表缺貨。",
+                "note": "網頁文字／按鈕屬性關鍵字判讀；連線失敗會重試一次；in_stock 是可能有貨，仍需開啟商品頁確認；unknown 不代表缺貨。",
             },
             ensure_ascii=False,
             indent=2,
