@@ -21,10 +21,10 @@ def fetch(url):
     return response.text
 
 def clean(value):
-    return re.sub(r"\\s+", " ", value or "").strip()
+    return re.sub(r"\s+", " ", value or "").strip()
 
 def yen(value):
-    match = re.search(r"[￥¥]\\s*([\\d,]+)", value or "")
+    match = re.search(r"[￥¥]\s*([\d,]+)", value or "")
     return "¥" + match.group(1) if match else ""
 
 def blocked(soup, html):
@@ -36,8 +36,8 @@ def blocked(soup, html):
 
 def positive_stock(text):
     return ("在庫あり" in text or "残りわずか" in text
-            or bool(re.search(r"残り\\s*\\d+\\s*点", text))
-            or bool(re.search(r"通常\\s*\\d+.*以内に発送", text)))
+            or bool(re.search(r"残り\s*\d+\s*点", text))
+            or bool(re.search(r"通常\s*\d+.*以内に発送", text)))
 
 def negative_stock(text):
     return any(token in text for token in ("現在在庫切れ", "一時的に在庫切れ", "在庫切れ", "入荷未定"))
@@ -51,7 +51,7 @@ def seller_from(block):
             if value and len(value) < 100:
                 return value
     text = clean(block.get_text(" ", strip=True))
-    match = re.search(r"(?:販売元|出品者)[:：]\\s*([^|]{2,70})", text)
+    match = re.search(r"(?:販売元|出品者)[:：]\s*([^|]{2,70})", text)
     return clean(match.group(1)) if match else "賣家未能辨識"
 
 def parse_offers(html):
@@ -143,10 +143,10 @@ def main():
     notify, title, body = False, "BX-53 監控更新", ""
     if result["status"] == "in_stock" and old_status != "in_stock":
         notify, title = True, "BX-53 可能補貨！"
-        body = "\\n".join(f'{o["seller"]}｜{o["price"]}' for o in result["offers"][:5])
+        body = "\n".join(f'{o["seller"]}｜{o["price"]}' for o in result["offers"][:5])
     elif result["status"] == "in_stock" and old_status == "in_stock" and new_sig != old_sig:
         notify, title = True, "BX-53 價格／賣家變動"
-        body = "\\n".join(f'{o["seller"]}｜{o["price"]}' for o in result["offers"][:5])
+        body = "\n".join(f'{o["seller"]}｜{o["price"]}' for o in result["offers"][:5])
     elif result["status"] == "out_of_stock" and old_status == "in_stock":
         notify, title, body = True, "BX-53 可能再次缺貨", "目前商品頁顯示缺貨。"
 
@@ -155,7 +155,7 @@ def main():
     if notify and NTFY_TOPIC:
         try:
             requests.post("https://ntfy.sh/" + quote(NTFY_TOPIC, safe=""),
-                data=(body + "\\n\\n" + PRODUCT_URL).encode("utf-8"),
+                data=(body + "\n\n" + PRODUCT_URL).encode("utf-8"),
                 headers={"Title": title, "Priority": "urgent" if result["status"] == "in_stock" else "default",
                          "Click": PRODUCT_URL, "Tags": "shopping_bags"}, timeout=15).raise_for_status()
         except Exception as error:
