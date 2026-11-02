@@ -16,11 +16,11 @@ SOURCES=[
 ]
 def get_status(s):
  r=requests.get(s["url"],headers=HEADERS,timeout=25); r.raise_for_status()
- soup=BeautifulSoup(r.text,"html.parser"); text=re.sub(r"\\s+"," ",soup.get_text(" ",strip=True))
+ soup=BeautifulSoup(r.text,"html.parser"); text=re.sub(r"\s+"," ",soup.get_text(" ",strip=True))
  if any(x.lower() in text.lower() for x in s["negative"]): state="out_of_stock"
  elif any(x.lower() in text.lower() for x in s["positive"]): state="in_stock"
  else: state="unknown"
- m=re.search(r"[￥¥]\\s*[0-9,]+",text)
+ m=re.search(r"[￥¥]\s*[0-9,]+",text)
  return {"id":s["id"],"name":s["name"],"url":s["url"],"status":state,"label":{"in_stock":"可能有貨","out_of_stock":"缺貨／停止販售","unknown":"無法確認"}[state],"price":m.group(0) if m else "","checked_at":datetime.now(timezone.utc).isoformat(timespec="seconds")}
 def main():
  try: old=json.loads(PATH.read_text(encoding="utf-8"))
