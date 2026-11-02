@@ -47,7 +47,7 @@ TARGETS = [
 ]
 
 def clean(value):
-    return re.sub(r"\\s+", " ", value or "").strip()
+    return re.sub(r"\s+", " ", value or "").strip()
 
 def check(target):
     try:
@@ -58,7 +58,7 @@ def check(target):
         soup = BeautifulSoup(html, "html.parser")
         title = clean(soup.title.get_text(" ", strip=True)) if soup.title else ""
         body = clean(soup.get_text(" ", strip=True))
-        low = (title + " " + body).lower()
+        low = (title + " " + body + " " + response.url).lower()
         blocked = (
             "html" not in content_type or len(html) < 500 or
             any(x in low for x in ("robot check", "captcha", "access denied", "cloudflare",
