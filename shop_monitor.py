@@ -142,8 +142,8 @@ def failed_result(source, error):
 def notify_restock(item):
     if not TOPIC:
         return
-    message = (f'{item["name"]}：{item.get("price") or "價格未辨識"}\\n'
-               f'{item["url"]}\\n辨識訊號：{item.get("matched_keyword", "")}\\n請開啟商品頁確認庫存。')
+    message = (f'{item["name"]}：{item.get("price") or "價格未辨識"}\n'
+               f'{item["url"]}\n辨識訊號：{item.get("matched_keyword", "")}\n請開啟商品頁確認庫存。')
     response = requests.post("https://ntfy.sh/" + quote(TOPIC, safe=""),
         data=message.encode("utf-8"),
         headers={"Title":"BX-53 日本通路可能補貨","Click":item["url"],"Priority":"high"},
