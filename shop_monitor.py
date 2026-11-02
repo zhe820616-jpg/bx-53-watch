@@ -54,13 +54,59 @@ def now():
 
 
 def page_text(soup):
+    # Include visible text and common stock-related HTML attributes.
     parts = [soup.get_text(" ", strip=True)]
-    for tag in soup.find_all(["meta", "button", "input", "a", "span"]):
-        for attr in ("content", "aria-label", "value", "title", "data-stock", "data-availability", "alt"):
+    for tag in soup.find_all(["meta", "button", "input", "a", "span", "div"]):
+        for attr in (
+            "content", "aria-label", "value", "title", "data-stock",
+            "data-availability", "data-stock-status", "itemprop", "alt"
+        ):
             value = tag.get(attr)
             if value:
                 parts.append(str(value))
-    return re.sub(r"\s+", " ", " ".join(parts))
+
+    # Some stores publish stock state in Schema.org JSON-LD even when the
+    # visible stock label is rendered dynamically by JavaScript.
+    for script in soup.find_all("script", type="application/ld+json"):
+        try:
+            data = json.loads(script.string or script.get_text())
+        except (json.JSONDecodeError, TypeError):
+            continue
+
+        def collect(node):
+            if isinstance(node, dict):
+                for key, value in node.items():
+                    if key.lower() == "availability":
+                        if isinstance(value, str):
+                            parts.append(value)
+                    collect(value)
+            elif isinstance(node, list):
+                for value in node:
+                    collect(value)
+        collect(data)
+
+    return re.sub(r"\\s+", " ", " ".join(parts))
+
+
+def structured_availability(soup):
+    values = []
+
+    def walk(node):
+        if isinstance(node, dict):
+            for key, value in node.items():
+                if key.lower() == "availability" and isinstance(value, str):
+                    values.append(value.rsplit("/", 1)[-1].lower())
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    for script in soup.find_all("script", type="application/ld+json"):
+        try:
+            walk(json.loads(script.string or script.get_text()))
+        except (json.JSONDecodeError, TypeError):
+            continue
+    return values
 
 
 def get_status(source):
@@ -87,11 +133,18 @@ def get_status(source):
 
     negative = next((word for word in source["negative"] if word.lower() in lower), None)
     positive = next((word for word in source["positive"] if word.lower() in lower), None)
+    availability = structured_availability(soup)
+    schema_out = next((v for v in availability if v in ("outofstock", "soldout", "discontinued")), None)
+    schema_in = next((v for v in availability if v in ("instock", "limitedavailability", "onlineonly")), None)
 
-    # Negative phrases take precedence to avoid treating a closed/preorder-ended page as available.
-    if negative:
+    # Explicit sold-out text wins over generic cart labels; structured stock
+    # state is used when the page exposes it.
+    if negative or schema_out:
         status = "out_of_stock"
-        matched = negative
+        matched = negative or f"schema:{schema_out}"
+    elif schema_in:
+        status = "in_stock"
+        matched = f"schema:{schema_in}"
     elif positive:
         status = "in_stock"
         matched = positive
