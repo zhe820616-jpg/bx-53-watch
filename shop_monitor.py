@@ -123,7 +123,7 @@ def get_status(source):
     # Use Chromium as a fallback for these sources; this does not bypass CAPTCHA or access controls.
     if response is None and source["id"] in BROWSER_FALLBACK_IDS and sync_playwright:
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch(headless=True, args=["--no-sandbox"])
+            browser = playwright.chromium.launch(headless=True, args=["--no-sandbox", "--disable-http2"])
             try:
                 page = browser.new_page(
                     user_agent=HEADERS["User-Agent"],
