@@ -31,7 +31,6 @@ jobs:
         id: live_tests
         run: python validation_monitor.py
       - name: Check Amazon Japan BX-53
-        if: steps.live_tests.outputs.mode == 'production'
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
         run: python monitor.py
@@ -40,9 +39,6 @@ jobs:
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
         run: python shop_monitor.py
-      - name: Keep production status untouched while validating control pages
-        if: steps.live_tests.outputs.mode != 'production'
-        run: echo "Live control-page validation incomplete; existing BX-53 production status files are preserved."
       - name: Publish status and test report
         if: always()
         run: |
