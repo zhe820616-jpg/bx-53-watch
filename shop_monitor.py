@@ -10,6 +10,11 @@ from urllib.parse import quote
 import requests
 from bs4 import BeautifulSoup
 
+try:
+    from playwright.sync_api import sync_playwright
+except ImportError:
+    sync_playwright = None
+
 TOPIC = os.getenv("NTFY_TOPIC", "").strip()
 PATH = Path("docs/shop-status.json")
 HEADERS = {
@@ -83,24 +88,55 @@ def get_status(source):
         "bic":"https://www.biccamera.com/", "yodobashi":"https://www.yodobashi.com/",
         "rakuten_kenbill":"https://www.rakuten.co.jp/", "hlj":"https://www.hlj.co.jp/",
     }[source["id"]]
+    response = None
+    html = ""
+    content_type = ""
+    fetch_method = "requests"
     with requests.Session() as session:
-        for attempt in range(3):
+        for attempt in range(2):
             try:
                 response = session.get(source["url"], headers={**HEADERS, "Referer":referer},
-                                       timeout=(10, 25), allow_redirects=True)
+                                       timeout=(8, 15), allow_redirects=True)
                 response.raise_for_status()
-                break
+                html = response.text
+                content_type = response.headers.get("Content-Type", "").lower()
+                if "html" in content_type and len(html) >= 500 and not is_blocked(
+                        BeautifulSoup(html, "html.parser"), html):
+                    break
+                last_error = ValueError("requests 回傳非完整商品頁或驗證頁")
+                response = None
             except requests.RequestException as error:
                 last_error = error
-                if attempt < 2:
-                    time.sleep(2 ** (attempt + 1))
-        else:
-            raise last_error
+                response = None
+            if attempt == 0:
+                time.sleep(2)
 
-    content_type = response.headers.get("Content-Type", "").lower()
-    soup = BeautifulSoup(response.text, "html.parser")
+    # Bic Camera and Yodobashi often require browser-rendered pages or block plain HTTP.
+    # Fall back to a real Chromium page only for those two stores.
+    if response is None and source["id"] in ("bic", "yodobashi") and sync_playwright:
+        with sync_playwright() as playwright:
+            browser = playwright.chromium.launch(headless=True, args=["--no-sandbox"])
+            try:
+                page = browser.new_page(
+                    user_agent=HEADERS["User-Agent"],
+                    locale="ja-JP",
+                    extra_http_headers={"Accept-Language": HEADERS["Accept-Language"]},
+                )
+                page.goto(source["url"], wait_until="domcontentloaded", timeout=45000)
+                page.wait_for_timeout(2500)
+                html = page.content()
+                content_type = "text/html; browser-rendered"
+                fetch_method = "playwright"
+                if len(html) < 500:
+                    raise ValueError("瀏覽器取得的頁面內容過短")
+            finally:
+                browser.close()
+    elif response is None:
+        raise last_error or RuntimeError("無法取得商品頁")
+
+    soup = BeautifulSoup(html, "html.parser")
     title = clean(soup.title.get_text(" ", strip=True)) if soup.title else ""
-    if "html" not in content_type or is_blocked(soup, response.text):
+    if "html" not in content_type or is_blocked(soup, html):
         raise ValueError("回應不是有效商品 HTML，或網站回傳封鎖／驗證頁")
     body = relevant_text(soup)
     identity_blob = (title + " " + body + " " + response.url).lower()
@@ -129,8 +165,8 @@ def get_status(source):
         "label":{"in_stock":"可能有貨（請點頁面確認）","out_of_stock":"缺貨／停止販售",
                  "unknown":"無法確認（未找到明確庫存訊號）"}[status],
         "price":price_match.group(0) if price_match else "", "matched_keyword":matched,
-        "http_status":response.status_code, "content_type":content_type,
-        "content_length":len(response.content), "page_title":title[:180],
+        "http_status":response.status_code if response is not None else 200, "content_type":content_type,
+        "fetch_method":fetch_method, "content_length":len(html.encode("utf-8")), "page_title":title[:180],
         "checked_at":now(),
     }
 
