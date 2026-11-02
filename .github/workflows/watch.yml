@@ -1,6 +1,15 @@
 name: BX-53 stock watch
 
 on:
+  push:
+    branches: ["main"]
+    paths:
+      - "monitor.py"
+      - "shop_monitor.py"
+      - "validation_monitor.py"
+      - "requirements.txt"
+      - ".github/workflows/watch.yml"
+      - "tests/**"
   schedule:
     - cron: "*/15 * * * *"
   workflow_dispatch:
