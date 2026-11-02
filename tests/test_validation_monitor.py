@@ -13,7 +13,7 @@ class ValidationMonitorTests(unittest.TestCase):
 
     @patch("validation_monitor.requests.get")
     def test_explicit_stock_and_identity_pass(self, get):
-        html = "<html><head><title>BEYBLADE X 1巻</title></head><body>在庫あり</body></html>"
+        html = "<html><head><title>BEYBLADE X 1巻</title></head><body>在庫あり " + ("商品説明 " * 100) + "</body></html>"
         response = Mock(status_code=200, text=html, content=html.encode(),
                         headers={"Content-Type": "text/html; charset=utf-8"},
                         url="https://www.biccamera.com/bc/item/12189630/")
@@ -24,7 +24,7 @@ class ValidationMonitorTests(unittest.TestCase):
 
     @patch("validation_monitor.requests.get")
     def test_wrong_identity_does_not_pass_even_if_stock_text_exists(self, get):
-        html = "<html><head><title>Different item</title></head><body>在庫あり</body></html>"
+        html = "<html><head><title>Different item</title></head><body>在庫あり " + ("商品説明 " * 100) + "</body></html>"
         response = Mock(status_code=200, text=html, content=html.encode(),
                         headers={"Content-Type": "text/html"},
                         url="https://example.com/")
