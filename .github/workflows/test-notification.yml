@@ -1,0 +1,22 @@
+name: Test ntfy notification
+
+on:
+  workflow_dispatch:
+
+jobs:
+  send-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send test notification
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          if [ -z "$NTFY_TOPIC" ]; then
+            echo "NTFY_TOPIC secret is missing or empty."
+            exit 1
+          fi
+          curl --fail --silent --show-error \
+            -H "Title: BX-53 通知測試" \
+            -H "Priority: default" \
+            -d "測試成功！你的 iPhone 已訂閱新的 BX-53 通知主題。" \
+            "https://ntfy.sh/$NTFY_TOPIC"
