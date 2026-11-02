@@ -1,0 +1,6 @@
+{
+ "asin":"B0HJ75X3PN","product_url":"https://www.amazon.co.jp/dp/B0HJ75X3PN",
+ "checked_at":null,"status":"unknown","label":"尚未執行第一次檢查",
+ "amazon_direct":"unknown","offers":[],"taiwan_shipping":"需登入 Amazon 並以台灣地址結帳確認",
+ "message":"請先在 GitHub Actions 手動執行 workflow。"
+}
