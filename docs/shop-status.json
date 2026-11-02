@@ -1,6 +1,6 @@
 {
   "product": "BX-53 All-in-One Set",
-  "checked_at": "2026-11-02T06:47:13+00:00",
+  "checked_at": "2026-11-02T07:45:42+00:00",
   "sources": [
     {
       "id": "bic",
@@ -9,7 +9,8 @@
       "status": "unknown",
       "label": "讀取失敗",
       "price": "",
-      "error": "HTTPSConnectionPool(host='www.biccamera.com', port=443): Read timed out. (read timeout=25)"
+      "error": "HTTPSConnectionPool(host='www.biccamera.com', port=443): Read timed out. (read timeout=15)",
+      "checked_at": "2026-11-02T07:45:42+00:00"
     },
     {
       "id": "yodobashi",
@@ -18,26 +19,33 @@
       "status": "unknown",
       "label": "讀取失敗",
       "price": "",
-      "error": "HTTPSConnectionPool(host='www.yodobashi.com', port=443): Read timed out. (read timeout=25)"
+      "error": "HTTPSConnectionPool(host='www.yodobashi.com', port=443): Read timed out. (read timeout=15)",
+      "checked_at": "2026-11-02T07:45:42+00:00"
     },
     {
       "id": "hlj",
       "name": "HobbyLink Japan",
       "url": "https://www.hlj.co.jp/product/TKT07373",
-      "status": "unknown",
-      "label": "無法確認",
+      "status": "out_of_stock",
+      "label": "缺貨／停止販售",
       "price": "¥7,480",
-      "checked_at": "2026-11-02T06:47:03+00:00"
+      "matched_keyword": "在庫なし",
+      "http_status": 200,
+      "page_title": "BEYBLADE X BX-53 オールインワンセット | HLJ.co.jp",
+      "checked_at": "2026-11-02T07:45:27+00:00"
     },
     {
       "id": "rakuten_kenbill",
       "name": "Rakuten kenbill-2",
       "url": "https://item.rakuten.co.jp/kenbill-2/4904810073734/",
       "status": "unknown",
-      "label": "無法確認",
+      "label": "無法確認（未找到庫存關鍵字）",
       "price": "",
-      "checked_at": "2026-11-02T06:47:13+00:00"
+      "matched_keyword": "",
+      "http_status": 200,
+      "page_title": "",
+      "checked_at": "2026-11-02T07:45:37+00:00"
     }
   ],
-  "note": "公開網頁文字判讀，unknown 不代表缺貨；請開啟商品頁確認。"
+  "note": "網頁文字關鍵字判讀；in_stock 是可能有貨，仍需開啟商品頁確認；unknown 不代表缺貨。"
 }
