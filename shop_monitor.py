@@ -118,9 +118,9 @@ def get_status(source):
             if attempt == 0:
                 time.sleep(2)
 
-    # Bic Camera and Yodobashi often require browser-rendered pages or block plain HTTP.
-    # Fall back to a real Chromium page only for those two stores.
-    if response is None and source["id"] in ("bic", "yodobashi", "rakuten_kenbill") and sync_playwright:
+    # Bic Camera, Yodobashi, and Rakuten product pages may block plain HTTP or need browser rendering.
+    # Use Chromium as a fallback for these sources; this does not bypass CAPTCHA or access controls.
+    if response is None and source["id"] in ("bic", "yodobashi", "rakuten_kenbill", "rakuten_premoa", "rakuten_sakura") and sync_playwright:
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch(headless=True, args=["--no-sandbox"])
             try:
