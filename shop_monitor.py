@@ -92,7 +92,8 @@ def get_status(source):
     last_error = None
     referer = {
         "bic":"https://www.biccamera.com/", "yodobashi":"https://www.yodobashi.com/",
-        "rakuten_kenbill":"https://www.rakuten.co.jp/", "hlj":"https://www.hlj.co.jp/",
+        "rakuten_kenbill":"https://www.rakuten.co.jp/", "rakuten_premoa":"https://www.rakuten.co.jp/",
+        "rakuten_sakura":"https://www.rakuten.co.jp/", "hlj":"https://www.hlj.co.jp/",
     }[source["id"]]
     response = None
     html = ""
