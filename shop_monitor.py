@@ -37,6 +37,12 @@ SOURCES = [
     {"id":"rakuten_kenbill","name":"Rakuten kenbill-2","url":"https://item.rakuten.co.jp/kenbill-2/4904810073734/",
      "identity":["bx-53","4904810073734"],"positive":["在庫あり","在庫有り","在庫残少","残りわずか","残り僅か"],
      "negative":["売り切れ","売り切れました","在庫切れ","在庫なし","販売期間外","販売期間が終了"]},
+    {"id":"rakuten_premoa","name":"Rakuten PREMOA","url":"https://item.rakuten.co.jp/premoa/4904810073734/",
+     "identity":["bx-53","4904810073734"],"positive":["在庫あり","在庫有り","在庫残少","残りわずか","残り僅か"],
+     "negative":["売り切れ","売り切れました","在庫切れ","在庫なし","販売期間外","販売期間が終了"]},
+    {"id":"rakuten_sakura","name":"Rakuten トイランドクローバー","url":"https://item.rakuten.co.jp/sakurayashouten/4904810073734/",
+     "identity":["bx-53","4904810073734"],"positive":["在庫あり","在庫有り","在庫残少","残りわずか","残り僅か"],
+     "negative":["売り切れ","売り切れました","在庫切れ","在庫なし","販売期間外","販売期間が終了"]},
 ]
 
 def now():
