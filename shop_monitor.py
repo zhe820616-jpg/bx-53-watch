@@ -16,6 +16,7 @@ except ImportError:
     sync_playwright = None
 
 TOPIC = os.getenv("NTFY_TOPIC", "").strip()
+BROWSER_FALLBACK_IDS = ("bic", "yodobashi", "rakuten_kenbill", "rakuten_premoa", "rakuten_sakura")
 PATH = Path("docs/shop-status.json")
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
@@ -120,7 +121,7 @@ def get_status(source):
 
     # Bic Camera, Yodobashi, and Rakuten product pages may block plain HTTP or need browser rendering.
     # Use Chromium as a fallback for these sources; this does not bypass CAPTCHA or access controls.
-    if response is None and source["id"] in ("bic", "yodobashi", "rakuten_kenbill", "rakuten_premoa", "rakuten_sakura") and sync_playwright:
+    if response is None and source["id"] in BROWSER_FALLBACK_IDS and sync_playwright:
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch(headless=True, args=["--no-sandbox"])
             try:
