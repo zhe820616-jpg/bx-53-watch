@@ -25,6 +25,12 @@ class ShopMonitorTests(unittest.TestCase):
         soup = BeautifulSoup(html, "html.parser")
         self.assertTrue(shop_monitor.is_blocked(soup, html))
 
+    def test_all_browser_fallback_sources_are_configured(self):
+        expected = {"bic", "yodobashi", "rakuten_kenbill", "rakuten_premoa", "rakuten_sakura"}
+        self.assertEqual(set(shop_monitor.BROWSER_FALLBACK_IDS), expected)
+        configured = {source["id"] for source in shop_monitor.SOURCES}
+        self.assertTrue(expected.issubset(configured))
+
     def test_stock_classification_keeps_unknown_when_no_signal(self):
         source = next(item for item in shop_monitor.SOURCES if item["id"] == "bic")
         self.assertNotIn("カートに入れる", source["positive"])
