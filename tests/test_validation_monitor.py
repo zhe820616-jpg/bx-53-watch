@@ -8,6 +8,8 @@ class ValidationMonitorTests(unittest.TestCase):
         for target in validation_monitor.TARGETS:
             self.assertNotIn("BX-53", target["url"].upper())
             self.assertTrue(target["identity"])
+    def test_clean_collapses_whitespace(self):
+        self.assertEqual(validation_monitor.clean("BX-53\\n  在庫あり\\t"), "BX-53 在庫あり")
 
     @patch("validation_monitor.requests.get")
     def test_explicit_stock_and_identity_pass(self, get):
