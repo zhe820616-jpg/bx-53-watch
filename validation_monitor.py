@@ -4,7 +4,6 @@ import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urlparse
 
 import requests
 from bs4 import BeautifulSoup
@@ -18,7 +17,7 @@ HEADERS = {
 }
 # Live control pages/products are deliberately separate from BX-53 production URLs.
 # A target passes only when the expected non-BX53 product/store identity and an
-# explicit in-stock signal are both present in the same response.
+# explicit stock-state signal (in-stock or out-of-stock) are both present in the same response.
 TARGETS = [
     {
         "id": "bic", "name": "Bic Camera", "kind": "product",
@@ -108,7 +107,7 @@ def main():
         "total": len(results),
         "checked_at": datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds"),
         "results": results,
-        "note": "This test uses non-BX53 control pages. It validates live page access and positive stock signals only; it does not prove BX-53 product-page selectors. BX-53 identity checks remain mandatory in production.",
+        "note": "This test uses non-BX53 control pages. It validates live page access and explicit stock-state signals (in-stock or out-of-stock); it does not prove BX-53 product-page selectors. BX-53 identity checks remain mandatory in production.",
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
