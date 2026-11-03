@@ -62,7 +62,7 @@ class ShopMonitorTests(unittest.TestCase):
         html = """<main><h1>BX-53</h1><p>在庫なし</p></main>
                   <aside><button>カートに入れる</button></aside>"""
         soup = BeautifulSoup(html, "html.parser")
-        self.assertEqual(shop_monitor.active_purchase_controls(soup), [])
+        self.assertEqual(shop_monitor.active_purchase_controls(soup, {"id": "bic"}), [])
 
     def test_blocked_short_response_is_rejected(self):
         html = "<html><body>ok</body></html>"
