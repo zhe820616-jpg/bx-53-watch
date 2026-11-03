@@ -1,6 +1,6 @@
 {
   "product": "BX-53 All-in-One Set",
-  "checked_at": "2026-11-03T15:35:02+00:00",
+  "checked_at": "2026-11-03T17:31:49+00:00",
   "sources": [
     {
       "id": "bic",
@@ -9,8 +9,8 @@
       "status": "unknown",
       "label": "無法確認（讀取／驗證失敗）",
       "price": "",
-      "error": "Page.content: Unable to retrieve content because the page is navigating and changing the content.",
-      "checked_at": "2026-11-03T15:35:02+00:00"
+      "error": "瀏覽器頁面未穩定，重試 4 次仍無法取得有效 HTML；瀏覽器取得的頁面內容過短",
+      "checked_at": "2026-11-03T17:31:49+00:00"
     },
     {
       "id": "yodobashi",
@@ -19,8 +19,8 @@
       "status": "unknown",
       "label": "無法確認（讀取／驗證失敗）",
       "price": "",
-      "error": "Page.content: Unable to retrieve content because the page is navigating and changing the content.",
-      "checked_at": "2026-11-03T15:35:02+00:00"
+      "error": "瀏覽器頁面未穩定，重試 4 次仍無法取得有效 HTML；瀏覽器取得的頁面內容過短",
+      "checked_at": "2026-11-03T17:31:49+00:00"
     },
     {
       "id": "hlj",
@@ -35,7 +35,7 @@
       "fetch_method": "requests",
       "content_length": 55249,
       "page_title": "BEYBLADE X BX-53 オールインワンセット | HLJ.co.jp",
-      "checked_at": "2026-11-03T15:26:57+00:00"
+      "checked_at": "2026-11-03T17:23:41+00:00"
     },
     {
       "id": "rakuten_kenbill",
@@ -48,9 +48,9 @@
       "http_status": 200,
       "content_type": "text/html; browser-rendered",
       "fetch_method": "playwright",
-      "content_length": 170099,
+      "content_length": 169765,
       "page_title": "【楽天市場】ベイブレードX BX-53 オールインワンセット【新品】 BEYBLADE X タカラトミー：ライフ＆ホビー ケンビル",
-      "checked_at": "2026-11-03T15:27:38+00:00"
+      "checked_at": "2026-11-03T17:24:23+00:00"
     },
     {
       "id": "rakuten_premoa",
@@ -65,7 +65,7 @@
       "fetch_method": "playwright",
       "content_length": 3532,
       "page_title": "【楽天市場】エラー",
-      "checked_at": "2026-11-03T15:27:32+00:00"
+      "checked_at": "2026-11-03T17:24:17+00:00"
     },
     {
       "id": "rakuten_sakura",
@@ -80,7 +80,7 @@
       "fetch_method": "playwright",
       "content_length": 3561,
       "page_title": "【楽天市場】エラー",
-      "checked_at": "2026-11-03T15:28:07+00:00"
+      "checked_at": "2026-11-03T17:24:51+00:00"
     }
   ],
   "summary": {
