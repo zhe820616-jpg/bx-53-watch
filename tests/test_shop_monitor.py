@@ -14,11 +14,25 @@ class ShopMonitorTests(unittest.TestCase):
     def test_structured_availability_reads_nested_product(self):
         html = """
         <script type="application/ld+json">
-        {"@type":"Product","offers":{"@type":"Offer","availability":"https://schema.org/InStock"}}
+        {"@type":"Product","name":"Beyblade X BX-53","sku":"BX-53","offers":{"@type":"Offer","availability":"https://schema.org/OutOfStock"}}
         </script>
         """
         soup = BeautifulSoup(html, "html.parser")
-        self.assertEqual(shop_monitor.structured_availability(soup), ["instock"])
+        self.assertEqual(shop_monitor.structured_availability(soup, ["bx-53"]), ["outofstock"])
+
+    def test_recommendation_product_stock_is_ignored(self):
+        html = """
+        <script type="application/ld+json">
+        {"@graph":[
+          {"@type":"Product","name":"Beyblade X BX-53","sku":"BX-53",
+           "offers":{"availability":"https://schema.org/OutOfStock"}},
+          {"@type":"Product","name":"Other Beyblade","sku":"BX-99",
+           "offers":{"availability":"https://schema.org/InStock"}}
+        ]}
+        </script>
+        """
+        soup = BeautifulSoup(html, "html.parser")
+        self.assertEqual(shop_monitor.structured_availability(soup, ["bx-53"]), ["outofstock"])
 
     def test_blocked_short_response_is_rejected(self):
         html = "<html><body>ok</body></html>"
