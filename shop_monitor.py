@@ -113,6 +113,32 @@ def relevant_text(soup):
         return max(candidates, key=len)
     return clean(soup.get_text(" ", strip=True))
 
+def active_purchase_controls(soup):
+    """Detect enabled purchase controls in the primary product content only."""
+    scopes = []
+    for selector in ("main", "#main", "#contents", "#container", ".productDetail",
+                     ".product-detail", "#productDetails", ".product"):
+        scopes.extend(soup.select(selector)[:2])
+    scope = max(scopes, key=lambda node: len(node.get_text(" ", strip=True))) if scopes else soup
+    words = ("カートに入れる", "買い物かごに入れる", "今すぐ買う", "注文する")
+    matches = []
+    for element in scope.select("button, input[type='submit'], input[type='button'], [role='button']"):
+        label = clean(" ".join((element.get_text(" ", strip=True),
+                                str(element.get("aria-label", "")),
+                                str(element.get("title", "")),
+                                str(element.get("value", "")))))
+        word = next((item for item in words if item in label), None)
+        if not word:
+            continue
+        classes = " ".join(element.get("class", [])).lower()
+        disabled = (element.has_attr("disabled")
+                    or str(element.get("aria-disabled", "")).lower() == "true"
+                    or "disabled" in classes or "soldout" in classes)
+        if not disabled:
+            matches.append(word)
+    return list(dict.fromkeys(matches))
+
+
 def get_status(source):
     last_error = None
     referer = {
@@ -205,8 +231,13 @@ def get_status(source):
     schema_out = next((v for v in availability if v in ("outofstock","soldout","discontinued")), None)
     schema_in = next((v for v in availability if v in ("instock","limitedavailability")), None)
 
-    if negative or schema_out:
+    purchase_controls = active_purchase_controls(soup)
+    if (negative or schema_out) and purchase_controls:
+        status, matched = "unknown", "庫存文字與可購買按鈕訊號衝突"
+    elif negative or schema_out:
         status, matched = "out_of_stock", negative or "schema:" + schema_out
+    elif purchase_controls:
+        status, matched = "in_stock", "enabled_button:" + purchase_controls[0]
     elif schema_in:
         status, matched = "in_stock", "schema:" + schema_in
     elif positive:
