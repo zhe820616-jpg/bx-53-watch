@@ -42,7 +42,7 @@ class ShopMonitorTests(unittest.TestCase):
     def test_disabled_add_to_cart_button_is_not_detected(self):
         html = """<main><h1>BX-53</h1><button disabled>カートに入れる</button></main>"""
         soup = BeautifulSoup(html, "html.parser")
-        self.assertEqual(shop_monitor.active_purchase_controls(soup), [])
+        self.assertEqual(shop_monitor.active_purchase_controls(soup, {"id": "bic"}), [])
 
     def test_retailer_specific_purchase_button_labels(self):
         cases = [
