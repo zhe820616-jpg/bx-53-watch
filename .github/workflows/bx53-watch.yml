@@ -20,7 +20,7 @@ permissions:
   actions: read
 
 concurrency:
-  group: bx53-stock-watch-active
+  group: bx53-stock-watch
   cancel-in-progress: false
 
 jobs:
@@ -64,4 +64,5 @@ jobs:
           if [ -f docs/status.json ]; then git add docs/status.json; fi
           if [ -f docs/shop-status.json ]; then git add docs/shop-status.json; fi
           git diff --cached --quiet || git commit -m "Update stock monitor validation status"
+          git pull --rebase origin main
           git push
