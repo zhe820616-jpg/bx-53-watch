@@ -34,6 +34,22 @@ class ShopMonitorTests(unittest.TestCase):
         soup = BeautifulSoup(html, "html.parser")
         self.assertEqual(shop_monitor.structured_availability(soup, ["bx-53"]), ["outofstock"])
 
+    def test_enabled_add_to_cart_button_is_detected(self):
+        html = """<main><h1>BX-53</h1><button>カートに入れる</button></main>"""
+        soup = BeautifulSoup(html, "html.parser")
+        self.assertEqual(shop_monitor.active_purchase_controls(soup), ["カートに入れる"])
+
+    def test_disabled_add_to_cart_button_is_not_detected(self):
+        html = """<main><h1>BX-53</h1><button disabled>カートに入れる</button></main>"""
+        soup = BeautifulSoup(html, "html.parser")
+        self.assertEqual(shop_monitor.active_purchase_controls(soup), [])
+
+    def test_recommendation_button_outside_main_product_is_ignored(self):
+        html = """<main><h1>BX-53</h1><p>在庫なし</p></main>
+                  <aside><button>カートに入れる</button></aside>"""
+        soup = BeautifulSoup(html, "html.parser")
+        self.assertEqual(shop_monitor.active_purchase_controls(soup), [])
+
     def test_blocked_short_response_is_rejected(self):
         html = "<html><body>ok</body></html>"
         soup = BeautifulSoup(html, "html.parser")
