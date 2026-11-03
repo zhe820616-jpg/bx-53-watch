@@ -41,6 +41,11 @@ jobs:
       - name: Run live non-BX53 control-page tests
         id: live_tests
         run: python validation_monitor.py
+      - name: Verify ntfy delivery (one-time push smoke test)
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[ntfy-check]')
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: python ntfy_test.py
       - name: Check Amazon Japan BX-53
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
