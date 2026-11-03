@@ -130,13 +130,30 @@ def get_status(source):
                     locale="ja-JP",
                     extra_http_headers={"Accept-Language": HEADERS["Accept-Language"]},
                 )
-                page.goto(source["url"], wait_until="domcontentloaded", timeout=45000)
-                page.wait_for_timeout(2500)
+                navigation_warning = ""
+                navigation_response = None
+                # Do not wait indefinitely for analytics/ads or a stalled DOMContentLoaded event.
+                # "commit" returns as soon as response headers arrive; the DOM can still be
+                # inspected even if the subsequent load-state wait times out.
+                try:
+                    navigation_response = page.goto(
+                        source["url"], wait_until="commit", timeout=25000
+                    )
+                except Exception as error:
+                    navigation_warning = f"navigation commit warning: {str(error)[:180]}"
+                try:
+                    page.wait_for_load_state("domcontentloaded", timeout=8000)
+                except Exception as error:
+                    warning = f"DOMContentLoaded wait timed out: {str(error)[:140]}"
+                    navigation_warning = (navigation_warning + "; " + warning).strip("; ")
+                page.wait_for_timeout(1500)
                 html = page.content()
                 content_type = "text/html; browser-rendered"
                 fetch_method = "playwright"
                 if len(html) < 500:
-                    raise ValueError("瀏覽器取得的頁面內容過短")
+                    raise ValueError(
+                        "瀏覽器取得的頁面內容過短；" + (navigation_warning or "頁面未載入")
+                    )
             finally:
                 browser.close()
     elif response is None:
