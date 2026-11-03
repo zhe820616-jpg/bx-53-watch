@@ -37,12 +37,26 @@ class ShopMonitorTests(unittest.TestCase):
     def test_enabled_add_to_cart_button_is_detected(self):
         html = """<main><h1>BX-53</h1><button>カートに入れる</button></main>"""
         soup = BeautifulSoup(html, "html.parser")
-        self.assertEqual(shop_monitor.active_purchase_controls(soup), ["カートに入れる"])
+        self.assertEqual(shop_monitor.active_purchase_controls(soup, {"id": "bic"}), ["カートに入れる"])
 
     def test_disabled_add_to_cart_button_is_not_detected(self):
         html = """<main><h1>BX-53</h1><button disabled>カートに入れる</button></main>"""
         soup = BeautifulSoup(html, "html.parser")
         self.assertEqual(shop_monitor.active_purchase_controls(soup), [])
+
+    def test_retailer_specific_purchase_button_labels(self):
+        cases = [
+            ("yodobashi", "ショッピングカートに入れる"),
+            ("hlj", "Add to Cart"),
+            ("rakuten_kenbill", "買い物かごに入れる"),
+        ]
+        for source_id, label in cases:
+            with self.subTest(source=source_id):
+                soup = BeautifulSoup(f"<main><h1>BX-53</h1><button>{label}</button></main>", "html.parser")
+                self.assertEqual(
+                    shop_monitor.active_purchase_controls(soup, {"id": source_id}),
+                    [label.lower()],
+                )
 
     def test_recommendation_button_outside_main_product_is_ignored(self):
         html = """<main><h1>BX-53</h1><p>在庫なし</p></main>

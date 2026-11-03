@@ -206,13 +206,24 @@ def get_status(source):
                 except Exception as error:
                     warning = f"DOMContentLoaded wait timed out: {str(error)[:140]}"
                     navigation_warning = (navigation_warning + "; " + warning).strip("; ")
-                page.wait_for_timeout(1500)
-                html = page.content()
+                # Some retailers keep redirecting while scripts initialize. Retry a
+                # small number of DOM snapshots instead of failing on the first race.
+                snapshot_error = None
+                for snapshot_attempt in range(4):
+                    try:
+                        page.wait_for_timeout(1200 if snapshot_attempt == 0 else 900)
+                        html = page.content()
+                        if len(html) >= 500:
+                            break
+                        snapshot_error = ValueError("瀏覽器取得的頁面內容過短")
+                    except Exception as error:
+                        snapshot_error = error
                 content_type = "text/html; browser-rendered"
                 fetch_method = "playwright"
                 if len(html) < 500:
                     raise ValueError(
-                        "瀏覽器取得的頁面內容過短；" + (navigation_warning or "頁面未載入")
+                        "瀏覽器頁面未穩定，重試 4 次仍無法取得有效 HTML；"
+                        + str(snapshot_error or navigation_warning or "頁面未載入")[:220]
                     )
             finally:
                 browser.close()
