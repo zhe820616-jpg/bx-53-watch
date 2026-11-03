@@ -52,8 +52,10 @@ def now():
 def clean(value):
     return re.sub(r"\s+", " ", value or "").strip()
 
-def structured_availability(soup):
+def structured_availability(soup, identity_tokens=None):
+    # Ignore stock signals from recommended products and ads.
     values = []
+
     def walk(node):
         if isinstance(node, dict):
             for key, value in node.items():
@@ -63,11 +65,33 @@ def structured_availability(soup):
         elif isinstance(node, list):
             for value in node:
                 walk(value)
+
+    def products(node):
+        if isinstance(node, dict):
+            node_type = node.get("@type", [])
+            types = node_type if isinstance(node_type, list) else [node_type]
+            if any(str(value).lower() == "product" for value in types):
+                yield node
+            for value in node.values():
+                yield from products(value)
+        elif isinstance(node, list):
+            for value in node:
+                yield from products(value)
+
+    tokens = [str(token).lower() for token in (identity_tokens or [])]
     for script in soup.find_all("script", type="application/ld+json"):
         try:
-            walk(json.loads(script.string or script.get_text()))
+            data = json.loads(script.string or script.get_text())
         except (json.JSONDecodeError, TypeError):
             continue
+        if not tokens:
+            walk(data)
+            continue
+        for product in products(data):
+            identity = " ".join(str(product.get(key, "")) for key in
+                                ("name", "sku", "mpn", "gtin", "gtin13", "gtin14", "url")).lower()
+            if any(token in identity for token in tokens):
+                walk(product)
     return values
 
 def is_blocked(soup, html):
@@ -177,7 +201,7 @@ def get_status(source):
     lower = body.lower()
     negative = next((word for word in source["negative"] if word.lower() in lower), None)
     positive = next((word for word in source["positive"] if word.lower() in lower), None)
-    availability = structured_availability(soup)
+    availability = structured_availability(soup, source['identity'])
     schema_out = next((v for v in availability if v in ("outofstock","soldout","discontinued")), None)
     schema_in = next((v for v in availability if v in ("instock","limitedavailability")), None)
 
