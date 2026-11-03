@@ -1,0 +1,67 @@
+name: BX-53 stock watch (active)
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "monitor.py"
+      - "shop_monitor.py"
+      - "validation_monitor.py"
+      - "ntfy_test.py"
+      - "requirements.txt"
+      - ".github/workflows/bx53-watch.yml"
+      - "tests/**"
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: bx53-stock-watch-active
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Install Chromium for retailer fallback
+        run: python -m playwright install --with-deps chromium
+      - name: Validate Python syntax
+        run: python -m compileall -q monitor.py shop_monitor.py validation_monitor.py ntfy_test.py tests
+      - name: Run monitor regression tests
+        run: python -m unittest discover -s tests -v
+      - name: Run live non-BX53 control-page tests
+        id: live_tests
+        run: python validation_monitor.py
+      - name: Verify ntfy delivery (one-time push smoke test)
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[ntfy-check]')
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: python ntfy_test.py
+      - name: Check Amazon Japan BX-53
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: python monitor.py
+      - name: Check other Japan retailers for BX-53
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: python shop_monitor.py
+      - name: Publish status and test report
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -f docs/test-status.json ]; then git add docs/test-status.json; fi
+          if [ -f docs/status.json ]; then git add docs/status.json; fi
+          if [ -f docs/shop-status.json ]; then git add docs/shop-status.json; fi
+          git diff --cached --quiet || git commit -m "Update stock monitor validation status"
+          git push
