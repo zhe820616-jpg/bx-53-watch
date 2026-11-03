@@ -11,7 +11,7 @@ response = requests.post(
     "https://ntfy.sh/" + quote(topic, safe=""),
     data="這是 BX-53 監控系統的通知連線測試。若收到此訊息，代表 GitHub Actions 已成功送達 ntfy。",
     headers={
-        "Title": "BX-53 通知測試",
+        "Title": "BX-53 notification test",
         "Priority": "default",
         "Tags": "white_check_mark",
     },
