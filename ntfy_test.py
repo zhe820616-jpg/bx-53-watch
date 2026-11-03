@@ -3,6 +3,7 @@ import sys
 import requests
 from urllib.parse import quote
 
+# A successful HTTP response confirms ntfy accepted the notification.
 topic = os.getenv("NTFY_TOPIC", "").strip()
 if not topic:
     raise SystemExit("NTFY_TOPIC secret is not configured")
