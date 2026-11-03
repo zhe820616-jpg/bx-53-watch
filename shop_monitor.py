@@ -113,29 +113,39 @@ def relevant_text(soup):
         return max(candidates, key=len)
     return clean(soup.get_text(" ", strip=True))
 
-def active_purchase_controls(soup):
-    """Detect enabled purchase controls in the primary product content only."""
+PURCHASE_TERMS = {
+    "bic": ("カートに入れる", "カートへ入れる"),
+    "yodobashi": ("ショッピングカートに入れる", "カートに入れる"),
+    "hlj": ("add to cart", "add to basket"),
+    "rakuten_kenbill": ("買い物かごに入れる", "買い物かごへ入れる", "商品をかごに追加"),
+    "rakuten_premoa": ("買い物かごに入れる", "買い物かごへ入れる", "商品をかごに追加"),
+    "rakuten_sakura": ("買い物かごに入れる", "買い物かごへ入れる", "商品をかごに追加"),
+}
+
+def active_purchase_controls(soup, source):
+    """Check only this retailer's configured buy-button labels."""
     scopes = []
     for selector in ("main", "#main", "#contents", "#container", ".productDetail",
                      ".product-detail", "#productDetails", ".product"):
         scopes.extend(soup.select(selector)[:2])
     scope = max(scopes, key=lambda node: len(node.get_text(" ", strip=True))) if scopes else soup
-    words = ("カートに入れる", "買い物かごに入れる", "今すぐ買う", "注文する")
+    terms = tuple(term.lower() for term in PURCHASE_TERMS.get(source["id"], ()))
     matches = []
-    for element in scope.select("button, input[type='submit'], input[type='button'], [role='button']"):
+    for element in scope.select("button, input[type='submit'], input[type='button'], [role='button'], a"):
         label = clean(" ".join((element.get_text(" ", strip=True),
                                 str(element.get("aria-label", "")),
                                 str(element.get("title", "")),
-                                str(element.get("value", "")))))
-        word = next((item for item in words if item in label), None)
-        if not word:
+                                str(element.get("value", "")),
+                                str(element.get("alt", "")))).lower())
+        term = next((item for item in terms if item in label), None)
+        if not term:
             continue
         classes = " ".join(element.get("class", [])).lower()
         disabled = (element.has_attr("disabled")
                     or str(element.get("aria-disabled", "")).lower() == "true"
-                    or "disabled" in classes or "soldout" in classes)
+                    or any(flag in classes for flag in ("disabled", "soldout", "out-of-stock")))
         if not disabled:
-            matches.append(word)
+            matches.append(term)
     return list(dict.fromkeys(matches))
 
 
@@ -231,7 +241,7 @@ def get_status(source):
     schema_out = next((v for v in availability if v in ("outofstock","soldout","discontinued")), None)
     schema_in = next((v for v in availability if v in ("instock","limitedavailability")), None)
 
-    purchase_controls = active_purchase_controls(soup)
+    purchase_controls = active_purchase_controls(soup, source)
     if (negative or schema_out) and purchase_controls:
         status, matched = "unknown", "庫存文字與可購買按鈕訊號衝突"
     elif negative or schema_out:
