@@ -3,7 +3,7 @@
   "all_passed": false,
   "passed": 1,
   "total": 4,
-  "checked_at": "2026-11-05T11:46:45+00:00",
+  "checked_at": "2026-11-05T12:51:35+00:00",
   "results": [
     {
       "id": "bic",
@@ -13,7 +13,7 @@
       "passed": false,
       "status": "fail",
       "reason": "HTTPSConnectionPool(host='www.biccamera.com', port=443): Read timed out. (read timeout=25)",
-      "checked_at": "2026-11-05T11:46:45+00:00"
+      "checked_at": "2026-11-05T12:51:35+00:00"
     },
     {
       "id": "yodobashi",
@@ -23,7 +23,7 @@
       "passed": false,
       "status": "fail",
       "reason": "HTTPSConnectionPool(host='www.yodobashi.com', port=443): Read timed out. (read timeout=25)",
-      "checked_at": "2026-11-05T11:46:45+00:00"
+      "checked_at": "2026-11-05T12:51:35+00:00"
     },
     {
       "id": "hlj",
@@ -40,7 +40,7 @@
       "content_type": "text/html; charset=utf-8",
       "content_length": 739801,
       "page_title": "検索結果 | HLJ.co.jp",
-      "checked_at": "2026-11-05T11:46:21+00:00"
+      "checked_at": "2026-11-05T12:51:11+00:00"
     },
     {
       "id": "rakuten_kenbill",
@@ -55,9 +55,9 @@
       "stock_signal": "",
       "http_status": 200,
       "content_type": "text/html",
-      "content_length": 43,
+      "content_length": 42,
       "page_title": "",
-      "checked_at": "2026-11-05T11:46:29+00:00"
+      "checked_at": "2026-11-05T12:51:20+00:00"
     }
   ],
   "note": "This test uses non-BX53 control pages. It validates live page access and explicit stock-state signals (in-stock or out-of-stock); it does not prove BX-53 product-page selectors. BX-53 identity checks remain mandatory in production."
