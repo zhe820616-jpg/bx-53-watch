@@ -1,12 +1,11 @@
 {
   "asin": "B0HJ75X3PN",
   "product_url": "https://www.amazon.co.jp/dp/B0HJ75X3PN",
-  "checked_at": "2026-11-07T18:16:37+00:00",
+  "checked_at": "2026-11-07T19:15:14+00:00",
   "status": "unknown",
   "label": "無法確認",
   "amazon_direct": "unknown",
   "offers": [],
   "taiwan_shipping": "需登入 Amazon 並以台灣地址結帳確認",
-  "message": "Amazon 出品列表回傳 CAPTCHA / Robot Check",
-  "title": "タカラトミー(TAKARA TOMY) BEYBLADE X ベイブレードX BX-53 オールインワンセット"
+  "message": "Amazon 商品頁回傳 CAPTCHA / Robot Check"
 }
