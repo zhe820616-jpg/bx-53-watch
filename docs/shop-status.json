@@ -1,6 +1,6 @@
 {
   "product": "BX-53 All-in-One Set",
-  "checked_at": "2026-11-08T17:52:09+00:00",
+  "checked_at": "2026-11-08T19:23:28+00:00",
   "sources": [
     {
       "id": "bic",
@@ -10,7 +10,7 @@
       "label": "無法確認（讀取／驗證失敗）",
       "price": "",
       "error": "瀏覽器頁面未穩定，重試 4 次仍無法取得有效 HTML；瀏覽器取得的頁面內容過短",
-      "checked_at": "2026-11-08T17:52:09+00:00"
+      "checked_at": "2026-11-08T19:23:28+00:00"
     },
     {
       "id": "yodobashi",
@@ -20,7 +20,7 @@
       "label": "無法確認（讀取／驗證失敗）",
       "price": "",
       "error": "瀏覽器頁面未穩定，重試 4 次仍無法取得有效 HTML；瀏覽器取得的頁面內容過短",
-      "checked_at": "2026-11-08T17:52:09+00:00"
+      "checked_at": "2026-11-08T19:23:28+00:00"
     },
     {
       "id": "hlj",
@@ -35,7 +35,7 @@
       "fetch_method": "requests",
       "content_length": 55249,
       "page_title": "BEYBLADE X BX-53 オールインワンセット | HLJ.co.jp",
-      "checked_at": "2026-11-08T17:44:04+00:00"
+      "checked_at": "2026-11-08T19:15:20+00:00"
     },
     {
       "id": "rakuten_kenbill",
@@ -48,9 +48,9 @@
       "http_status": 200,
       "content_type": "text/html; browser-rendered",
       "fetch_method": "playwright",
-      "content_length": 171733,
+      "content_length": 173570,
       "page_title": "【楽天市場】ベイブレードX BX-53 オールインワンセット【新品】 BEYBLADE X タカラトミー：ライフ＆ホビー ケンビル",
-      "checked_at": "2026-11-08T17:44:43+00:00"
+      "checked_at": "2026-11-08T19:16:01+00:00"
     },
     {
       "id": "rakuten_premoa",
@@ -65,7 +65,7 @@
       "fetch_method": "playwright",
       "content_length": 3532,
       "page_title": "【楽天市場】エラー",
-      "checked_at": "2026-11-08T17:44:38+00:00"
+      "checked_at": "2026-11-08T19:15:56+00:00"
     },
     {
       "id": "rakuten_sakura",
@@ -80,7 +80,7 @@
       "fetch_method": "playwright",
       "content_length": 3561,
       "page_title": "【楽天市場】エラー",
-      "checked_at": "2026-11-08T17:45:12+00:00"
+      "checked_at": "2026-11-08T19:16:31+00:00"
     }
   ],
   "summary": {
