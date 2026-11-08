@@ -1,6 +1,6 @@
 {
   "product": "BX-53 All-in-One Set",
-  "checked_at": "2026-11-08T21:53:14+00:00",
+  "checked_at": "2026-11-08T23:09:34+00:00",
   "sources": [
     {
       "id": "bic",
@@ -10,7 +10,7 @@
       "label": "無法確認（讀取／驗證失敗）",
       "price": "",
       "error": "瀏覽器頁面未穩定，重試 4 次仍無法取得有效 HTML；瀏覽器取得的頁面內容過短",
-      "checked_at": "2026-11-08T21:53:14+00:00"
+      "checked_at": "2026-11-08T23:09:34+00:00"
     },
     {
       "id": "yodobashi",
@@ -20,7 +20,7 @@
       "label": "無法確認（讀取／驗證失敗）",
       "price": "",
       "error": "瀏覽器頁面未穩定，重試 4 次仍無法取得有效 HTML；瀏覽器取得的頁面內容過短",
-      "checked_at": "2026-11-08T21:53:09+00:00"
+      "checked_at": "2026-11-08T23:09:34+00:00"
     },
     {
       "id": "hlj",
@@ -35,22 +35,22 @@
       "fetch_method": "requests",
       "content_length": 55249,
       "page_title": "BEYBLADE X BX-53 オールインワンセット | HLJ.co.jp",
-      "checked_at": "2026-11-08T21:45:04+00:00"
+      "checked_at": "2026-11-08T23:01:27+00:00"
     },
     {
       "id": "rakuten_kenbill",
       "name": "Rakuten kenbill-2",
       "url": "https://item.rakuten.co.jp/kenbill-2/4904810073734/",
-      "status": "out_of_stock",
-      "label": "缺貨／停止販售",
+      "status": "in_stock",
+      "label": "可能有貨（請點頁面確認）",
       "price": "",
-      "matched_keyword": "売り切れ",
+      "matched_keyword": "残りわずか",
       "http_status": 200,
       "content_type": "text/html; browser-rendered",
       "fetch_method": "playwright",
-      "content_length": 173442,
+      "content_length": 169872,
       "page_title": "【楽天市場】ベイブレードX BX-53 オールインワンセット【新品】 BEYBLADE X タカラトミー：ライフ＆ホビー ケンビル",
-      "checked_at": "2026-11-08T21:45:46+00:00"
+      "checked_at": "2026-11-08T23:02:07+00:00"
     },
     {
       "id": "rakuten_premoa",
@@ -65,7 +65,7 @@
       "fetch_method": "playwright",
       "content_length": 3532,
       "page_title": "【楽天市場】エラー",
-      "checked_at": "2026-11-08T21:45:40+00:00"
+      "checked_at": "2026-11-08T23:02:01+00:00"
     },
     {
       "id": "rakuten_sakura",
@@ -80,12 +80,12 @@
       "fetch_method": "playwright",
       "content_length": 3561,
       "page_title": "【楽天市場】エラー",
-      "checked_at": "2026-11-08T21:46:15+00:00"
+      "checked_at": "2026-11-08T23:02:35+00:00"
     }
   ],
   "summary": {
-    "in_stock": 0,
-    "out_of_stock": 2,
+    "in_stock": 1,
+    "out_of_stock": 1,
     "unknown": 4
   },
   "note": "只在確認頁面為 BX-53 後判讀；優先使用商品主內容及結構化庫存資料；unknown 不代表缺貨。"
